@@ -5,6 +5,16 @@ const app = express();
 const customers = [];
 app.use(express.json());
 
+function verifyExistsAccountNIF(req,res,next)
+{
+    const {nif} = req.headers
+    const customer = customers.find((customer)=>customer.nif == nif);
+    
+    if(!customer)
+        return res.status(400).json({error:"custormer not found!"});
+    req.customer = customer;
+    return next();
+}
 app.post("/account",(req,res)=>{
     const {nif,name} = req.body;
     const id = uuidv4();
@@ -24,11 +34,8 @@ app.post("/account",(req,res)=>{
 
     return res.status(201).send();
 });
-app.get("/statement/:nif",(req,res)=>{
-    const {nif} = req.params;
-
-    const customer = customers.find(customer => customer.nif === nif);
-
+app.get("/statement",verifyExistsAccountNIF,(req,res)=>{
+    const {customer} = req;
     return res.status(200).json(customer.statement);
 });
 app.listen(3000);
