@@ -95,4 +95,17 @@ app.get("/statement/date",verifyExistsAccountNIF,(req,res)=>{
             statement.create_at.toDateString() === new Date(dateFormat).toDateString());
     return res.status(200).json(customer.statement);
 });
+
+app.put("/account",verifyExistsAccountNIF,(req,res)=>{
+    const { name } = req.body;
+    const {customer} = req;
+
+    customer.name = name;
+
+    return res.status(201).send();
+});
+app.get("/account",verifyExistsAccountNIF,(req,res)=>{
+    const {customer} = req;
+    return res.status(201).json(customer);
+})
 app.listen(3000);
