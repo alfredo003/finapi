@@ -38,4 +38,21 @@ app.get("/statement",verifyExistsAccountNIF,(req,res)=>{
     const {customer} = req;
     return res.status(200).json(customer.statement);
 });
+app.post("/deposit",verifyExistsAccountNIF,(req,res)=>{
+        const {description, anount} = req.body;
+
+        const {customer} = req;
+
+        const statementOperation = {
+            description,
+            anount,
+            create_at: new Date(),
+            type: "credit"
+        }
+        customer.statement.push(statementOperation);
+        return res.status(200).send();
+});
+app.post("/withdraw",verifyExistsAccountNIF,(req,res)=>{
+    
+})
 app.listen(3000);
