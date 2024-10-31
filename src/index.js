@@ -85,4 +85,14 @@ app.post("/withdraw",verifyExistsAccountNIF,(req,res)=>{
     return res.status(201).send();
 
 })
+app.get("/statement/date",verifyExistsAccountNIF,(req,res)=>{
+    const {date} = req.query;
+    const {customer} = req;
+
+    const dateFormat = new Date(date + " 00:00");
+
+    const  statement = customer.statement.filter((statement)=>
+            statement.create_at.toDateString() === new Date(dateFormat).toDateString());
+    return res.status(200).json(customer.statement);
+});
 app.listen(3000);
