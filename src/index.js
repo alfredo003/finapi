@@ -107,5 +107,13 @@ app.put("/account",verifyExistsAccountNIF,(req,res)=>{
 app.get("/account",verifyExistsAccountNIF,(req,res)=>{
     const {customer} = req;
     return res.status(201).json(customer);
-})
+});
+
+app.delete("/account",verifyExistsAccountNIF,(req,res)=>{
+    const {customer} = req;
+
+    customers.splice(customer,1);
+    return res.status(200).json(customers);
+});
+
 app.listen(3000);
